@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/ilyakaznacheev/cleanenv"
 	"log"
 	"os"
 	"time"
@@ -30,5 +31,8 @@ func MustLoad() *Config {
 	}
 
 	var cfg Config
-
+	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
+		log.Fatalf("cannot read config %s", configPath)
+	}
+	return &cfg
 }
