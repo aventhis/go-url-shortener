@@ -4,6 +4,7 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 	"log"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -20,7 +21,8 @@ type HttpServer struct {
 }
 
 func MustLoad() *Config {
-	configPath := os.Getenv("CONFIG_PATH")
+	configPath := strings.TrimSpace(os.Getenv("CONFIG_PATH"))
+
 	if configPath == "" {
 		log.Fatal("CONFIG_PATH environment variable not set")
 	}

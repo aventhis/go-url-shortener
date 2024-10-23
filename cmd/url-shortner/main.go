@@ -1,8 +1,13 @@
 package main
 
-func main() {
-	// TODO: init config: cleanenv
+import (
+	"github.com/aventhis/go-url-shortener/internal/config"
+)
 
+func main() {
+	// init config
+	cfg := config.MustLoad()
+	//fmt.Println(cfg)
 	// TODO: init logger: slog
 
 	// TODO: init storage: sqlite
