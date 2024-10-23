@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/aventhis/go-url-shortener/internal/config"
+	"github.com/aventhis/go-url-shortener/internal/lib/logger/sl"
+	"github.com/aventhis/go-url-shortener/internal/storage/sqlite"
 	"log/slog"
 	"os"
 )
@@ -16,13 +18,20 @@ func main() {
 	// init config
 	cfg := config.MustLoad()
 
-	//  init logger
+	// init logger
 	log := setupLogger(cfg.Env)
 
 	log.Info("starting url shortener", slog.String("env", cfg.Env))
 	log.Debug("debug messages are enabled")
-	// TODO: init storage: sqlite
 
+	// init storage: sqlite
+	storage, err := sqlite.New(cfg.StoragePath)
+	if err != nil {
+		log.Error("failed to initialize storage", sl.Err(err))
+		os.Exit(1)
+	}
+
+	_ = storage
 	// TODO: init router: chi, "chi render"
 
 	// TODO: run server:
@@ -30,18 +39,15 @@ func main() {
 }
 
 func setupLogger(env string) *slog.Logger {
-	var logger *slog.Logger
+	var handler slog.Handler
 	switch env {
 	case envLocal:
-		logger = slog.New(
-			slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+		handler = slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug})
 	case envDev:
-		logger = slog.New(
-			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+		handler = slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug})
 	case envProd:
-		logger = slog.New(
-			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
+		handler = slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo})
 	}
 
-	return logger
+	return slog.New(handler)
 }
