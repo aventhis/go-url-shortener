@@ -29,6 +29,7 @@ func New(storagePath string) (*Storage, error) {
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
+	defer stmt.Close()
 
 	_, err = stmt.Exec()
 	if err != nil {
@@ -36,4 +37,8 @@ func New(storagePath string) (*Storage, error) {
 	}
 
 	return &Storage{db: db}, nil
+}
+
+func (s *Storage) Close() error {
+	return s.db.Close()
 }
