@@ -32,6 +32,24 @@ func main() {
 	}
 	defer storage.Close()
 
+	//_, err = storage.SaveURL("https://www.youtube.com", "youtube")
+	//if err != nil {
+	//	log.Error("failed to save url", sl.Err(err))
+	//}
+	//
+	//url, err := storage.GetURL("youtube")
+	//if err != nil {
+	//	log.Error("failed to get url", sl.Err(err))
+	//}
+	//log.Info("url for alias youtube", slog.String("url", url))
+
+	//err = storage.DeleteURL("youtube")
+	//if err != nil {
+	//	log.Error("failed to delete url", sl.Err(err))
+	//}
+	//
+	//log.Info("Delete url", slog.String("url", url))
+
 	// TODO: init router: chi, "chi render"
 
 	// TODO: run server:
