@@ -32,7 +32,6 @@ func main() {
 	}
 	defer storage.Close()
 
-	_ = storage
 	// TODO: init router: chi, "chi render"
 
 	// TODO: run server:
